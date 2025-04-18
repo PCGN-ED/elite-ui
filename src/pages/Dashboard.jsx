@@ -5,9 +5,11 @@ export default function Dashboard() {
   const [commander, setCommander] = useState(null);
 
   useEffect(() => {
-    // In a real app, fetch from API here
-    setCommander(commanderData);
+    fetch('https://elite-backend-production.up.railway.app/api/commander')
+      .then((res) => res.json())
+      .then((data) => setCommander(data));
   }, []);
+  
 
   if (!commander) return <div className="p-6">Loading Commander Data...</div>;
 
