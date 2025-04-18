@@ -1,0 +1,14 @@
+{
+    "name": "CMDR Maverick",
+    "system": "Shinrarta Dezhra",
+    "faction": "The Voidhawks",
+    "power": "Aisling Duval",
+    "credits": 4200000000,
+    "ranks": {
+      "combat": "Deadly",
+      "trade": "Elite",
+      "explore": "Elite",
+      "cqc": "Semi-Pro"
+    }
+  }
+  
