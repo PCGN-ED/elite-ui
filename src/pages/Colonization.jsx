@@ -1,0 +1,1 @@
+export default function Colonization() { return <div className="p-6 text-2xl">Colonization Progress Tracker</div>; }

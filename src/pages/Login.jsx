@@ -1,0 +1,1 @@
+export default function Login() { return <div className="p-6 text-2xl">Login Page (Coming Soon)</div>; }

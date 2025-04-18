@@ -1,0 +1,1 @@
+export default function Squadron() { return <div className="p-6 text-2xl">Squadron Control Panel</div>; }

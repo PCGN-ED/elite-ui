@@ -1,0 +1,1 @@
+export default function Commander() { return <div className="p-6 text-2xl">Commander Stats and Activity</div>; }
