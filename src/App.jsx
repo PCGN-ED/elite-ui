@@ -5,6 +5,7 @@ import Commander from './pages/Commander';
 import Squadron from './pages/Squadron';
 import Colonization from './pages/Colonization';
 import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 import Navbar from './components/Navbar';
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
       {isAuthenticated && <Navbar onLogout={handleLogout} />}
       <Routes>
         <Route path="/signin" element={<SignIn setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/signup" element={<SignUp setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/signin" />} />
         <Route path="/commander" element={isAuthenticated ? <Commander /> : <Navigate to="/signin" />} />
         <Route path="/squadron" element={isAuthenticated ? <Squadron /> : <Navigate to="/signin" />} />
