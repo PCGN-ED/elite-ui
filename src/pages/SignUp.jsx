@@ -11,7 +11,7 @@ export default function SignUp({ setIsAuthenticated }) {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+    script.src = 'https://www.google.com/recaptcha/api.js';
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
@@ -31,31 +31,30 @@ export default function SignUp({ setIsAuthenticated }) {
     setLoading(true);
 
     try {
-      if (!window.grecaptcha) {
-        throw new Error('reCAPTCHA not loaded');
+      const recaptchaToken = window.grecaptcha.getResponse();
+      if (!recaptchaToken) {
+        setError('Please complete the reCAPTCHA.');
+        setLoading(false);
+        return;
       }
 
-      await window.grecaptcha.ready(async () => {
-        const recaptchaToken = await window.grecaptcha.execute(siteKey, { action: 'submit' });
-
-        const res = await fetch('https://elite-backend-production.up.railway.app/api/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...form, recaptchaToken }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          setError(data.error || 'Registration failed');
-          return;
-        }
-
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('commander', JSON.stringify(data.commander));
-        setIsAuthenticated(true);
-        navigate('/dashboard');
+      const res = await fetch('https://elite-backend-production.up.railway.app/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, recaptchaToken }),
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || 'Registration failed');
+        return;
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('commander', JSON.stringify(data.commander));
+      setIsAuthenticated(true);
+      navigate('/dashboard');
     } catch (err) {
       console.error('reCAPTCHA error:', err);
       setError('reCAPTCHA failed to load. Please refresh and try again.');
@@ -95,6 +94,12 @@ export default function SignUp({ setIsAuthenticated }) {
           onChange={handleChange}
           required
         />
+
+        <div
+          className="g-recaptcha"
+          data-sitekey="6LcP6R0rAAAAAKlj9l30Kx7h1qdjqUSJEkITDDOr"
+        ></div>
+
         <button
           type="submit"
           disabled={loading}
