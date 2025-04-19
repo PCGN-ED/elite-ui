@@ -7,6 +7,7 @@ import Squadron from './pages/Squadron';
 import Colonization from './pages/Colonization';
 import Login from './pages/Login';
 import Navbar from './components/Navbar';
+import SignIn from './pages/SignIn';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -17,6 +18,7 @@ export default function App() {
         {isAuthenticated && <Navbar />}
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/signin" element={<SignIn />} />
           <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path="/commander" element={isAuthenticated ? <Commander /> : <Navigate to="/login" />} />
           <Route path="/squadron" element={isAuthenticated ? <Squadron /> : <Navigate to="/login" />} />
