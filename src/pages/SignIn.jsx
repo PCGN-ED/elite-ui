@@ -60,6 +60,13 @@ export default function SignIn({ setIsAuthenticated }) {
           Log In
         </button>
         {error && <p className="text-red-400 mt-2">{error}</p>}
+        <p className="text-sm text-gray-400 mt-4">
+  Don’t have an account?{' '}
+  <a href="/signup" className="text-blue-400 hover:underline">
+    Create one here
+  </a>
+</p>
+
       </form>
     </div>
   );
