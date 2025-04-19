@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function SignUp({ setIsAuthenticated }) {
   const [form, setForm] = useState({ username: '', email: '', password: '' });
@@ -112,6 +112,12 @@ export default function SignUp({ setIsAuthenticated }) {
       <div className="mt-4 text-xs text-gray-400">
         Protected by reCAPTCHA. <a href="https://policies.google.com/privacy" className="underline">Privacy</a> • <a href="https://policies.google.com/terms" className="underline">Terms</a>
       </div>
+      <p className="text-sm text-gray-400 mt-4">
+        Already have an account?{' '}
+        <Link to="/signin" className="text-blue-400 hover:underline">
+          Sign in here
+        </Link>
+      </p>
     </div>
   );
 }
