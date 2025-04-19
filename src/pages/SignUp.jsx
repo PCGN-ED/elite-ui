@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function SignUp({ setIsAuthenticated }) {
@@ -7,7 +7,19 @@ export default function SignUp({ setIsAuthenticated }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const siteKey = '6LcP6R0rAAAAAKlj9l30Kx7h1qdjqUSJEkITDDOr'; // ⬅️ Replace with your real site key
+  const siteKey = '6LcP6R0rAAAAAKlj9l30Kx7h1qdjqUSJEkITDDOr';
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,39 +30,35 @@ export default function SignUp({ setIsAuthenticated }) {
     setError('');
     setLoading(true);
 
-    let recaptchaToken = '';
-
-if (window.grecaptcha) {
-  await window.grecaptcha.ready(async () => {
-    recaptchaToken = await window.grecaptcha.execute(siteKey, { action: 'submit' });
-  });
-} else {
-  setError('reCAPTCHA failed to load. Please refresh and try again.');
-  setLoading(false);
-  return;
-}
-
     try {
-      const res = await fetch('https://elite-backend-production.up.railway.app/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, recaptchaToken }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Registration failed');
-        return;
+      if (!window.grecaptcha) {
+        throw new Error('reCAPTCHA not loaded');
       }
 
-      // Save token & commander data
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('commander', JSON.stringify(data.commander));
-      setIsAuthenticated(true);
-      navigate('/dashboard');
+      await window.grecaptcha.ready(async () => {
+        const recaptchaToken = await window.grecaptcha.execute(siteKey, { action: 'submit' });
+
+        const res = await fetch('https://elite-backend-production.up.railway.app/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...form, recaptchaToken }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          setError(data.error || 'Registration failed');
+          return;
+        }
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('commander', JSON.stringify(data.commander));
+        setIsAuthenticated(true);
+        navigate('/dashboard');
+      });
     } catch (err) {
-      setError('Server error');
+      console.error('reCAPTCHA error:', err);
+      setError('reCAPTCHA failed to load. Please refresh and try again.');
     } finally {
       setLoading(false);
     }
@@ -99,8 +107,6 @@ if (window.grecaptcha) {
       <div className="mt-4 text-xs text-gray-400">
         Protected by reCAPTCHA. <a href="https://policies.google.com/privacy" className="underline">Privacy</a> • <a href="https://policies.google.com/terms" className="underline">Terms</a>
       </div>
-      {/* reCAPTCHA script */}
-      <script src={`https://www.google.com/recaptcha/api.js?render=${siteKey}`}></script>
     </div>
   );
 }
