@@ -18,7 +18,17 @@ export default function SignUp({ setIsAuthenticated }) {
     setError('');
     setLoading(true);
 
-    const recaptchaToken = await window.grecaptcha.execute(siteKey, { action: 'submit' });
+    let recaptchaToken = '';
+
+if (window.grecaptcha) {
+  await window.grecaptcha.ready(async () => {
+    recaptchaToken = await window.grecaptcha.execute(siteKey, { action: 'submit' });
+  });
+} else {
+  setError('reCAPTCHA failed to load. Please refresh and try again.');
+  setLoading(false);
+  return;
+}
 
     try {
       const res = await fetch('https://elite-backend-production.up.railway.app/api/register', {
