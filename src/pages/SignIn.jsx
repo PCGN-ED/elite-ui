@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function SignIn() {
+export default function SignIn({ setIsAuthenticated }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -9,29 +9,31 @@ export default function SignIn() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const res = await fetch('https://elite-backend-production.up.railway.app/api/login', {
+      const res = await fetch('https://your-backend-url/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-
+  
       const data = await res.json();
-
+  
       if (!res.ok) {
         setError(data.error || 'Login failed');
         return;
       }
-
+  
       localStorage.setItem('token', data.token);
       localStorage.setItem('commander', JSON.stringify(data.commander));
-
+  
+      setIsAuthenticated(true); // ✅ THIS LINE IS ESSENTIAL
       navigate('/dashboard');
     } catch (err) {
       setError('Server error');
     }
   };
+  
 
   return (
     <div className="p-6 max-w-md mx-auto">
