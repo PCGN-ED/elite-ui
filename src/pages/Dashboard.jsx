@@ -41,7 +41,19 @@ export default function Dashboard() {
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">Welcome, CMDR {commander.username}</h1>
 
-      
+      <div className="bg-gray-800 p-4 rounded-2xl shadow-md mb-6">
+  <h2 className="text-xl font-bold mb-2">📊 24h Trade Summary</h2>
+  <p className="text-lg">
+    🪙 Total Credits Traded: <span className="font-semibold text-green-300">
+      {totalCredits.toLocaleString()} CR
+    </span>
+  </p>
+  <p className="text-lg">
+    📦 Total Commodities Moved: <span className="font-semibold text-blue-300">
+      {totalQuantity}
+    </span>
+  </p>
+</div>
 
       <div className="bg-gray-800 p-4 rounded-2xl shadow-md mt-6">
         <h2 className="text-xl font-bold mb-2">🔐 EDMC Plugin API Token</h2>
