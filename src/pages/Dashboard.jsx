@@ -16,7 +16,11 @@ export default function Dashboard() {
       },
     })
       .then((res) => res.json())
-      .then((data) => setActivity(data.reverse()));
+      .then((data) => {
+        const since = Date.now() - 24 * 60 * 60 * 1000;
+        const filtered = data.filter(a => new Date(a.timestamp).getTime() >= since);
+        setActivity(filtered);
+      });
 
     fetch('https://elite-backend-production.up.railway.app/api/commander/token', {
       method: 'POST',
@@ -40,18 +44,32 @@ export default function Dashboard() {
       </div>
 
       <div className="bg-gray-800 p-4 rounded-2xl shadow-md mb-6">
-        <h2 className="text-2xl font-bold mb-2">📜 Recent Commander Activity</h2>
+        <h2 className="text-2xl font-bold mb-2">📜 Recent Commander Activity (Last 24h)</h2>
         {activity.length === 0 ? (
           <p className="text-gray-400">No recent activity logged.</p>
         ) : (
-          <ul className="space-y-2">
-            {activity.map((entry) => (
-              <li key={entry.id} className="border-b border-gray-600 pb-2">
-                <p className="text-md"><span className="text-green-400 font-semibold">{entry.type}</span>: {entry.details}</p>
-                <p className="text-xs text-gray-400">🕒 {new Date(entry.timestamp).toLocaleString()}</p>
-              </li>
-            ))}
-          </ul>
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="text-gray-300 border-b border-gray-600">
+                <th className="py-2">Type</th>
+                <th className="py-2">Commodity</th>
+                <th className="py-2">Quantity</th>
+                <th className="py-2">Credits</th>
+                <th className="py-2">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              {activity.map((entry, index) => (
+                <tr key={index} className="border-b border-gray-700">
+                  <td className="py-1 capitalize">{entry.type}</td>
+                  <td className="py-1">{entry.commodity || '-'}</td>
+                  <td className="py-1">{entry.quantity || 0}</td>
+                  <td className="py-1">{entry.credits?.toLocaleString() || 0} CR</td>
+                  <td className="py-1 text-xs text-gray-400">{new Date(entry.timestamp).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
 
