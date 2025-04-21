@@ -34,6 +34,9 @@ export default function Dashboard() {
 
   if (!commander) return <div className="p-6">Please log in to view your dashboard.</div>;
 
+  const totalCredits = activity.reduce((sum, a) => sum + (a.credits || 0), 0);
+  const totalQuantity = activity.reduce((sum, a) => sum + (a.quantity || 0), 0);
+
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">Welcome, CMDR {commander.username}</h1>
@@ -48,28 +51,41 @@ export default function Dashboard() {
         {activity.length === 0 ? (
           <p className="text-gray-400">No recent activity logged.</p>
         ) : (
-          <table className="w-full text-sm text-left">
-            <thead>
-              <tr className="text-gray-300 border-b border-gray-600">
-                <th className="py-2">Type</th>
-                <th className="py-2">Commodity</th>
-                <th className="py-2">Quantity</th>
-                <th className="py-2">Credits</th>
-                <th className="py-2">Timestamp</th>
-              </tr>
-            </thead>
-            <tbody>
-              {activity.map((entry, index) => (
-                <tr key={index} className="border-b border-gray-700">
-                  <td className="py-1 capitalize">{entry.type}</td>
-                  <td className="py-1">{entry.commodity || '-'}</td>
-                  <td className="py-1">{entry.quantity || 0}</td>
-                  <td className="py-1">{entry.credits?.toLocaleString() || 0} CR</td>
-                  <td className="py-1 text-xs text-gray-400">{new Date(entry.timestamp).toLocaleString()}</td>
+          <>
+            <table className="w-full text-sm text-left">
+              <thead>
+                <tr className="text-gray-300 border-b border-gray-600">
+                  <th className="py-2">Type</th>
+                  <th className="py-2">Commodity</th>
+                  <th className="py-2">Quantity</th>
+                  <th className="py-2">Credits</th>
+                  <th className="py-2">Timestamp</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {activity.map((entry, index) => (
+                  <tr
+                    key={index}
+                    className={`border-b border-gray-700 ${entry.type.includes('sell') ? 'bg-green-900/30' : entry.type.includes('buy') ? 'bg-blue-900/30' : ''}`}
+                  >
+                    <td className="py-1 capitalize">{entry.type}</td>
+                    <td className="py-1">{entry.commodity || '-'}</td>
+                    <td className="py-1">{entry.quantity || 0}</td>
+                    <td className="py-1">{entry.credits?.toLocaleString() || 0} CR</td>
+                    <td className="py-1 text-xs text-gray-400">{new Date(entry.timestamp).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="border-t border-gray-600 text-gray-300">
+                  <td colSpan="2" className="py-2 font-bold text-right">Totals:</td>
+                  <td className="py-2 font-bold">{totalQuantity}</td>
+                  <td className="py-2 font-bold">{totalCredits.toLocaleString()} CR</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </>
         )}
       </div>
 
