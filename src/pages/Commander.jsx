@@ -69,6 +69,14 @@ export default function Commander() {
           </>
         )}
       </div>
+      <div className="bg-gray-800 p-4 rounded-2xl shadow-md mb-6">
+  <h2 className="text-2xl font-bold mb-2">📍 Trade Locations (Last 24h)</h2>
+  <ul className="text-sm text-gray-300 list-disc pl-6">
+    {[...new Set(activity.map(a => `${a.system || 'Unknown'} / ${a.station || 'Unknown'}`))].map((location, i) => (
+      <li key={i}>{location}</li>
+    ))}
+  </ul>
+</div>
     </div>
   );
 }
