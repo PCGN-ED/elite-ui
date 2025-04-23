@@ -32,7 +32,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-[#0d0d0d] text-[#e0e0e0]">
       {isAuthenticated && <Navbar onLogout={handleLogout} />}
       <Routes>
         <Route path="/signin" element={<SignIn setIsAuthenticated={setIsAuthenticated} />} />
@@ -54,4 +54,3 @@ export default function WrappedApp() {
     </Router>
   );
 }
-
