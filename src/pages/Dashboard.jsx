@@ -32,34 +32,34 @@ export default function Dashboard() {
       .then(data => setApiToken(data.api_token));
   }, []);
 
-  if (!commander) return <div className="p-6">Please log in to view your dashboard.</div>;
+  if (!commander) return <div className="p-6 bg-[#0d0d0d] text-[#e0e0e0]">Please log in to view your dashboard.</div>;
 
   const totalCredits = activity.reduce((sum, a) => sum + (a.credits || 0), 0);
   const totalQuantity = activity.reduce((sum, a) => sum + (a.quantity || 0), 0);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">Welcome, CMDR {commander.username}</h1>
+    <div className="p-6 max-w-5xl mx-auto bg-[#0d0d0d] text-[#e0e0e0]">
+      <h1 className="text-3xl font-bold mb-4 text-[#ffa500]">Welcome, CMDR {commander.username}</h1>
 
-      <div className="bg-gray-800 p-4 rounded-2xl shadow-md mb-6">
-  <h2 className="text-xl font-bold mb-2">📊 24h Trade Summary</h2>
-  <p className="text-lg">
-    🪙 Total Credits Traded: <span className="font-semibold text-green-300">
-      {totalCredits.toLocaleString()} CR
-    </span>
-  </p>
-  <p className="text-lg">
-    📦 Total Commodities Moved: <span className="font-semibold text-blue-300">
-      {totalQuantity}
-    </span>
-  </p>
-</div>
+      <div className="bg-[#1c1c1c] p-4 rounded-2xl shadow-md mb-6 border border-[#2a2a2a]">
+        <h2 className="text-xl font-bold mb-2 text-[#ff8c00]">📊 24h Trade Summary</h2>
+        <p className="text-lg">
+          🪙 Total Credits Traded: <span className="font-semibold text-green-300">
+            {totalCredits.toLocaleString()} CR
+          </span>
+        </p>
+        <p className="text-lg">
+          📦 Total Commodities Moved: <span className="font-semibold text-blue-300">
+            {totalQuantity}
+          </span>
+        </p>
+      </div>
 
-      <div className="bg-gray-800 p-4 rounded-2xl shadow-md mt-6">
-        <h2 className="text-xl font-bold mb-2">🔐 EDMC Plugin API Token</h2>
+      <div className="bg-[#1c1c1c] p-4 rounded-2xl shadow-md mt-6 border border-[#2a2a2a]">
+        <h2 className="text-xl font-bold mb-2 text-[#ff8c00]">🔐 EDMC Plugin API Token</h2>
         {apiToken ? (
           <>
-            <div className="bg-gray-700 p-2 rounded text-green-300 font-mono mb-2 overflow-x-auto">
+            <div className="bg-[#333] p-2 rounded text-green-300 font-mono mb-2 overflow-x-auto">
               {apiToken}
             </div>
             <button
@@ -70,7 +70,7 @@ export default function Dashboard() {
             </button>
           </>
         ) : (
-          <p className="text-gray-400">Generating token...</p>
+          <p className="text-[#999]">Generating token...</p>
         )}
       </div>
     </div>
