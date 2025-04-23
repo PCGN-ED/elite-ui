@@ -35,7 +35,7 @@ export default function Colonization() {
           return (
             <div key={i} className="mb-8">
               <h2 className="text-xl font-bold mb-2">🪐 {system} — {displayStation}</h2>
-              <table className="w-full text-sm text-left">
+              <table className="w-full text-sm text-left bg-gray-800 rounded-xl">
                 <thead>
                   <tr className="text-gray-300 border-b border-gray-600">
                     <th className="py-2">Commodity</th>
@@ -69,4 +69,3 @@ export default function Colonization() {
     </div>
   );
 }
-
