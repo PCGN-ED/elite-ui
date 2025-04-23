@@ -25,7 +25,7 @@ export default function Colonization() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">🌌 Colonization Contributions</h1>
+      <h1 className="text-3xl font-bold mb-6">🌌 Your Colonization Contributions</h1>
       {support.length === 0 ? (
         <p className="text-gray-400">No deliveries logged yet.</p>
       ) : (
@@ -40,8 +40,7 @@ export default function Colonization() {
                   <tr className="text-gray-300 border-b border-gray-600">
                     <th className="py-2">Commodity</th>
                     <th className="py-2">Quantity</th>
-                    <th className="py-2">Credits</th>
-                    <th className="py-2">Timestamp</th>
+                                        <th className="py-2">Timestamp</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -49,12 +48,20 @@ export default function Colonization() {
                     <tr key={index} className="border-b border-gray-700">
                       <td className="py-1">{entry.commodity || '-'}</td>
                       <td className="py-1">{entry.quantity || 0}</td>
-                      <td className="py-1">{entry.credits?.toLocaleString() || 0} CR</td>
-                      <td className="py-1 text-xs text-gray-400">{new Date(entry.timestamp).toLocaleString()}</td>
+                                            <td className="py-1 text-xs text-gray-400">{new Date(entry.timestamp).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              <div className="mt-2 text-sm text-gray-300">
+                <strong>Total per commodity:</strong>
+                <ul className="ml-4 list-disc">
+                  {[...new Set(entries.map(e => e.commodity))].map((commodity, idx) => {
+                    const totalQty = entries.filter(e => e.commodity === commodity).reduce((sum, e) => sum + (e.quantity || 0), 0);
+                    return <li key={idx}>{commodity}: {totalQty}</li>;
+                  })}
+                </ul>
+              </div>
             </div>
           );
         })
@@ -62,3 +69,4 @@ export default function Colonization() {
     </div>
   );
 }
+
