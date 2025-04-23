@@ -37,7 +37,7 @@ export default function Colonization() {
             {support.map((entry, index) => (
               <tr key={index} className="border-b border-gray-700">
                 <td className="py-1">{entry.system || '-'}</td>
-                <td className="py-1">{entry.station || '-'}</td>
+                <td className="py-1">{entry.station?.includes('ColonisationShip') ? 'System Colonisation Ship' : entry.station || '-'}</td>
                 <td className="py-1">{entry.commodity || '-'}</td>
                 <td className="py-1">{entry.quantity || 0}</td>
                 <td className="py-1">{entry.credits?.toLocaleString() || 0} CR</td>
