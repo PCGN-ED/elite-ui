@@ -37,8 +37,8 @@ export default function Colonization() {
   // Include fully completed commodities in the progress bar by querying the full depot_commodities instead
   const fullProgress = requirements.reduce((acc, entry) => {
     if (!acc[entry.market_id]) acc[entry.market_id] = { provided: 0, required: 0 };
-    acc[entry.market_id].provided += entry.provided || 0;
-    acc[entry.market_id].required += entry.required || 0;
+    acc[entry.market_id].provided += Number(entry.provided) || 0;
+    acc[entry.market_id].required += Number(entry.required) || 0;
     return acc;
   }, {});
 
