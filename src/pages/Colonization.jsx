@@ -35,7 +35,7 @@ export default function Colonization() {
   }, {});
 
   return (
-    <div className="p-6 max-w-5xl mx-auto bg-[#0d0d0d] text-[#e0e0e0]">
+    <div className="p-6 max-w-5xl mx-auto bg-[#0d0d0d] text-[#e0e0e0]" style={{ fontFamily: "'Rajdhani', sans-serif" }}>
       <h1 className="text-3xl font-bold mb-6 text-[#ffa500]">🌌 Your Colonization Contributions</h1>
       {support.length === 0 ? (
         <p className="text-[#999]">No deliveries logged yet.</p>
