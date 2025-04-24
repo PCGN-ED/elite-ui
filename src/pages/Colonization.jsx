@@ -84,8 +84,10 @@ export default function Colonization() {
                 </div>
                 <div className="mt-2 text-sm text-[#ffa500] font-bold">
                   🚧 Construction Progress: {
-                    fullProgress[marketId] ? Math.round((fullProgress[marketId].provided / fullProgress[marketId].required) * 100) : 0
-                  }%
+                    fullProgress[marketId]
+                      ? `${fullProgress[marketId].provided.toLocaleString()} / ${fullProgress[marketId].required.toLocaleString()} (${Math.round((fullProgress[marketId].provided / fullProgress[marketId].required) * 100)}%)`
+                      : '0 / 0 (0%)'
+                  }
                 </div>
               {groupedRequirements[marketId] && (
                 <div className="mt-4 text-sm text-[#ccc]">
