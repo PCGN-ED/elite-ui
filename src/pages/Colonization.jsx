@@ -73,7 +73,15 @@ export default function Colonization() {
                     return <li key={idx}>{commodity}: {totalQty}</li>;
                   })}
                 </ul>
-              </div>
+                </div>
+                <div className="mt-2 text-sm text-[#ffa500] font-bold">
+                  🚧 Construction Progress: {
+                    Math.round(
+                      (groupedRequirements[marketId].reduce((sum, r) => sum + r.provided, 0) /
+                      groupedRequirements[marketId].reduce((sum, r) => sum + r.required, 0)) * 100
+                    )
+                  }%
+                </div>
               {groupedRequirements[marketId] && (
                 <div className="mt-4 text-sm text-[#ccc]">
                   <strong className="text-[#ffa500]">Still Required:</strong>
