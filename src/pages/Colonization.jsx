@@ -74,7 +74,10 @@ export default function Colonization() {
                   })}
                 </ul>
                 </div>
-                <div className="mt-4">
+               <div className="mt-4">
+  <div className="text-sm text-[#ffa500] font-bold mb-1">
+    🚧 Construction Progress:
+    <div className="mt-4">
   <div className="text-sm text-[#ffa500] font-bold mb-1">
     🚧 Construction Progress:
   </div>
@@ -88,6 +91,17 @@ export default function Colonization() {
         )}%`
       }}
     ></div>
+  </div>
+  <div className="text-xs text-[#e0e0e0] mt-1">
+    {
+      Math.round(
+        (groupedRequirements[marketId].reduce((sum, r) => sum + r.provided, 0) /
+        groupedRequirements[marketId].reduce((sum, r) => sum + r.required, 0)) * 100
+      )
+    }% Complete
+  </div>
+</div>
+
   </div>
   <div className="text-xs text-[#e0e0e0] mt-1">
     {Math.round(
