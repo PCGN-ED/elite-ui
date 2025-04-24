@@ -34,8 +34,16 @@ export default function Colonization() {
     return acc;
   }, {});
 
+  // Include fully completed commodities in the progress bar by querying the full depot_commodities instead
+  const fullProgress = requirements.reduce((acc, entry) => {
+    if (!acc[entry.market_id]) acc[entry.market_id] = { provided: 0, required: 0 };
+    acc[entry.market_id].provided += entry.provided;
+    acc[entry.market_id].required += entry.required;
+    return acc;
+  }, {});
+
   return (
-    <div className="p-6 max-w-5xl mx-auto bg-[#0d0d0d] text-[#e0e0e0]" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+    <div className="p-6 max-w-5xl mx-auto bg-[#0d0d0d] text-[#e0e0e0]">
       <h1 className="text-3xl font-bold mb-6 text-[#ffa500]">🌌 Your Colonization Contributions</h1>
       {support.length === 0 ? (
         <p className="text-[#999]">No deliveries logged yet.</p>
@@ -74,22 +82,11 @@ export default function Colonization() {
                   })}
                 </ul>
                 </div>
-                <div className="mt-4">
                 <div className="mt-2 text-sm text-[#ffa500] font-bold">
                   🚧 Construction Progress: {
                     fullProgress[marketId] ? Math.round((fullProgress[marketId].provided / fullProgress[marketId].required) * 100) : 0
                   }%
                 </div>
-  <div className="text-xs text-[#e0e0e0] mt-1">
-    {
-      Math.round(
-        (groupedRequirements[marketId].reduce((sum, r) => sum + r.provided, 0) /
-        groupedRequirements[marketId].reduce((sum, r) => sum + r.required, 0)) * 100
-      )
-    }% Complete
-  </div>
-</div>
-
               {groupedRequirements[marketId] && (
                 <div className="mt-4 text-sm text-[#ccc]">
                   <strong className="text-[#ffa500]">Still Required:</strong>
