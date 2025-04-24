@@ -78,9 +78,6 @@ export default function Colonization() {
   <div className="text-sm text-[#ffa500] font-bold mb-1">
     🚧 Construction Progress:
     <div className="mt-4">
-  <div className="text-sm text-[#ffa500] font-bold mb-1">
-    🚧 Construction Progress:
-  </div>
   <div className="w-full bg-[#2a2a2a] h-4 rounded overflow-hidden">
     <div
       className="h-full bg-[#ffa500]"
