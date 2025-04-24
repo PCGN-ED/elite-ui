@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 export default function Colonization() {
   const [support, setSupport] = useState([]);
+  const [requirements, setRequirements] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -14,12 +15,22 @@ export default function Colonization() {
     })
       .then(res => res.json())
       .then(data => setSupport(data));
+
+    fetch('https://elite-backend-production.up.railway.app/api/colonization/requirements')
+      .then(res => res.json())
+      .then(data => setRequirements(data));
   }, []);
 
   const grouped = support.reduce((acc, entry) => {
     const key = `${entry.system} / ${entry.station}`;
     if (!acc[key]) acc[key] = [];
     acc[key].push(entry);
+    return acc;
+  }, {});
+
+  const groupedRequirements = requirements.reduce((acc, entry) => {
+    if (!acc[entry.market_id]) acc[entry.market_id] = [];
+    acc[entry.market_id].push(entry);
     return acc;
   }, {});
 
@@ -31,6 +42,7 @@ export default function Colonization() {
       ) : (
         Object.entries(grouped).map(([location, entries], i) => {
           const [system, station] = location.split(' / ');
+          const marketId = entries[0]?.market_id;
           const displayStation = station.includes('ColonisationShip') ? 'System Colonisation Ship' : station;
           return (
             <div key={i} className="mb-8 border border-[#2a2a2a] rounded-xl bg-[#1c1c1c] p-4">
@@ -62,6 +74,16 @@ export default function Colonization() {
                   })}
                 </ul>
               </div>
+              {groupedRequirements[marketId] && (
+                <div className="mt-4 text-sm text-[#ccc]">
+                  <strong className="text-[#ffa500]">Still Required:</strong>
+                  <ul className="ml-4 list-disc">
+                    {groupedRequirements[marketId].map((req, idx) => (
+                      <li key={idx}>{req.commodity}: {req.required - req.provided}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           );
         })
