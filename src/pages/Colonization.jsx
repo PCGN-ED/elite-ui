@@ -86,9 +86,18 @@ export default function Colonization() {
                 </ul>
               </div>
 
-              <div className="mt-2 text-sm text-[#ffa500] font-bold">
-                🚧 Construction Progress: {Math.round(progressValue * 100)}%
-              </div>
+              <div className="mt-2">
+  <div className="text-sm text-[#ffa500] font-bold mb-1">
+    🚧 Construction Progress: {Math.round(progressValue * 100)}%
+  </div>
+  <div className="w-full bg-[#333] h-2 rounded-full overflow-hidden">
+    <div
+      className="h-full bg-[#ffa500]"
+      style={{ width: `${Math.min(Math.round(progressValue * 100), 100)}%` }}
+    ></div>
+  </div>
+</div>
+
 
               {groupedRequirements[marketId] && (
                 <div className="mt-4 text-sm text-[#ccc]">
