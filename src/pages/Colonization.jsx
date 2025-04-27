@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 export default function Colonization() {
   const [support, setSupport] = useState([]);
   const [requirements, setRequirements] = useState([]);
+  const [openProjects, setOpenProjects] = useState({}); // <-- NEW: track open/collapsed state
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -41,6 +42,13 @@ export default function Colonization() {
     return acc;
   }, {});
 
+  const toggleProject = (key) => {
+    setOpenProjects(prev => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   return (
     <div className="p-6 max-w-5xl mx-auto bg-[#0d0d0d] text-[#e0e0e0]">
       <h1 className="text-3xl font-bold mb-6 text-[#ffa500]">🌌 Your Colonization Contributions</h1>
@@ -52,43 +60,54 @@ export default function Colonization() {
           const marketId = entries[0]?.market_id;
           const displayStation = station.includes('ColonisationShip') ? 'System Colonisation Ship' : station;
           const progressValue = entries[0]?.progress !== undefined ? parseFloat(entries[0].progress) : 0;
+          const isOpen = openProjects[location] ?? true; // Default to open if not yet toggled
 
           return (
-            <div key={i} className="mb-8 border border-[#2a2a2a] rounded-xl bg-[#1c1c1c] p-4">
-              <h2 className="text-xl font-bold mb-4 text-[#ff8c00]">🪐 {system} — {displayStation}</h2>
-
-              <div className="text-sm text-[#ccc] mb-4">
-                <strong className="text-[#ffa500]">Total per commodity:</strong>
-                <ul className="ml-4 list-disc mt-2">
-                  {[...new Set(entries.map(e => e.commodity))].map((commodity, idx) => {
-                    const totalQty = entries
-                      .filter(e => e.commodity === commodity)
-                      .reduce((sum, e) => sum + (e.quantity || 0), 0);
-                    return <li key={idx}>{commodity}: {totalQty}</li>;
-                  })}
-                </ul>
+            <div key={i} className="mb-8 border border-[#2a2a2a] rounded-xl bg-[#1c1c1c]">
+              <div
+                onClick={() => toggleProject(location)}
+                className="cursor-pointer bg-[#1c1c1c] hover:bg-[#262626] p-4 flex justify-between items-center rounded-t-xl"
+              >
+                <h2 className="text-xl font-bold text-[#ff8c00]">🪐 {system} — {displayStation}</h2>
+                <span className="text-[#ccc] text-sm">{isOpen ? '▼' : '►'}</span>
               </div>
 
-              <div className="mt-2 mb-4">
-                <div className="text-sm text-[#ffa500] font-bold mb-1">
-                  🚧 Construction Progress: {Math.round(progressValue * 100)}%
-                </div>
-                <div className="w-full bg-[#333] h-2 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[#ffa500]"
-                    style={{ width: `${Math.min(Math.round(progressValue * 100), 100)}%` }}
-                  ></div>
-                </div>
-              </div>
+              {isOpen && (
+                <div className="p-4 border-t border-[#2a2a2a]">
+                  <div className="text-sm text-[#ccc] mb-4">
+                    <strong className="text-[#ffa500]">Total per commodity:</strong>
+                    <ul className="ml-4 list-disc mt-2">
+                      {[...new Set(entries.map(e => e.commodity))].map((commodity, idx) => {
+                        const totalQty = entries
+                          .filter(e => e.commodity === commodity)
+                          .reduce((sum, e) => sum + (e.quantity || 0), 0);
+                        return <li key={idx}>{commodity}: {totalQty}</li>;
+                      })}
+                    </ul>
+                  </div>
 
-              {groupedRequirements[marketId] && (
-                <div className="mt-4 text-sm text-[#ccc]">
-                  <strong className="text-[#ffa500]">Still Required:</strong>
-                  <ul className="ml-4 list-disc mt-2">
-                    {groupedRequirements[marketId].map((req, idx) => (
-                      <li key={idx}>{req.commodity}: {req.required - req.provided}</li>
-                    ))}
-                  </ul>
+                  <div className="mt-2 mb-4">
+                    <div className="text-sm text-[#ffa500] font-bold mb-1">
+                      🚧 Construction Progress: {Math.round(progressValue * 100)}%
+                    </div>
+                    <div className="w-full bg-[#333] h-2 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[#ffa500]"
+                        style={{ width: `${Math.min(Math.round(progressValue * 100), 100)}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  {groupedRequirements[marketId] && (
+                    <div className="mt-4 text-sm text-[#ccc]">
+                      <strong className="text-[#ffa500]">Still Required:</strong>
+                      <ul className="ml-4 list-disc mt-2">
+                        {groupedRequirements[marketId].map((req, idx) => (
+                          <li key={idx}>{req.commodity}: {req.required - req.provided}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
