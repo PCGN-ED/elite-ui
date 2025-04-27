@@ -49,12 +49,21 @@ export default function Colonization() {
     }));
   };
 
+  // 🛠 NEW: Create a set of market_ids the commander contributed to
+  const commanderMarkets = new Set(support.map(entry => entry.market_id));
+
   // Split active vs completed projects
   const activeProjects = [];
   const completedProjects = [];
 
   Object.entries(grouped).forEach(([location, entries]) => {
     const progressValue = entries[0]?.progress !== undefined ? parseFloat(entries[0].progress) : 0;
+    const marketId = entries[0]?.market_id;
+
+    if (!commanderMarkets.has(marketId)) {
+      return; // 🚫 Skip if commander hasn't delivered to this station
+    }
+
     if (progressValue >= 1) {
       completedProjects.push([location, entries]);
     } else {
@@ -68,7 +77,10 @@ export default function Colonization() {
       <h1 className="text-3xl font-bold mb-6 text-[#ffa500]">🌌 Your Colonization Contributions</h1>
 
       {activeProjects.length === 0 ? (
-        <p className="text-[#999] mb-8">No active construction projects at the moment.</p>
+        <p className="text-[#999] mb-8">
+          🚀 You have not contributed to any active construction projects yet.<br />
+          Find a Colonization Depot and start hauling today!
+        </p>
       ) : (
         activeProjects.map(([location, entries], i) => {
           const [system, station] = location.split(' / ');
