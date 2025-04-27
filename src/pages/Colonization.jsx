@@ -51,13 +51,12 @@ export default function Colonization() {
           const [system, station] = location.split(' / ');
           const marketId = entries[0]?.market_id;
           const displayStation = station.includes('ColonisationShip') ? 'System Colonisation Ship' : station;
+          const progressValue = entries[0]?.progress !== undefined ? parseFloat(entries[0].progress) : 0;
+
           return (
             <div key={i} className="mb-8 border border-[#2a2a2a] rounded-xl bg-[#1c1c1c] p-4">
-              <pre className="text-xs text-green-400 bg-black p-2 rounded">
-  {JSON.stringify(entries[0], null, 2)}
-</pre>
-
               <h2 className="text-xl font-bold mb-2 text-[#ff8c00]">🪐 {system} — {displayStation}</h2>
+
               <table className="w-full text-sm text-left">
                 <thead>
                   <tr className="text-[#ffcc00] border-b border-[#333]">
@@ -76,6 +75,7 @@ export default function Colonization() {
                   ))}
                 </tbody>
               </table>
+
               <div className="mt-2 text-sm text-[#ccc]">
                 <strong className="text-[#ffa500]">Total per commodity:</strong>
                 <ul className="ml-4 list-disc">
@@ -85,12 +85,9 @@ export default function Colonization() {
                   })}
                 </ul>
               </div>
+
               <div className="mt-2 text-sm text-[#ffa500] font-bold">
-                 🚧 Construction Progress: {
-                 entries[0]?.progress !== undefined
-              ? `${Math.round(parseFloat(entries[0].progress) * 100)}%`
-               : 'Unknown'
-             }
+                🚧 Construction Progress: {Math.round(progressValue * 100)}%
               </div>
 
               {groupedRequirements[marketId] && (
