@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 export default function Colonization() {
   const [support, setSupport] = useState([]);
   const [requirements, setRequirements] = useState([]);
-  const [openProjects, setOpenProjects] = useState({}); // track open/collapsed state
+  const [openProjects, setOpenProjects] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -49,7 +49,7 @@ export default function Colonization() {
     }));
   };
 
-  // 🛠 NEW: Split active vs completed
+  // Split active vs completed projects
   const activeProjects = [];
   const completedProjects = [];
 
@@ -75,7 +75,7 @@ export default function Colonization() {
           const marketId = entries[0]?.market_id;
           const displayStation = station.includes('ColonisationShip') ? 'System Colonisation Ship' : station;
           const progressValue = entries[0]?.progress !== undefined ? parseFloat(entries[0].progress) : 0;
-          const isOpen = openProjects[location] ?? true; // Default to open
+          const isOpen = openProjects[location] ?? true;
 
           return (
             <div key={i} className="mb-8 border border-[#2a2a2a] rounded-xl bg-[#1c1c1c]">
@@ -138,7 +138,7 @@ export default function Colonization() {
           {completedProjects.map(([location, entries], i) => {
             const [system, station] = location.split(' / ');
             const displayStation = station.includes('ColonisationShip') ? 'System Colonisation Ship' : station;
-            const isOpen = openProjects[location] ?? false; // Default to collapsed
+            const isOpen = openProjects[location] ?? false;
 
             return (
               <div key={i} className="mb-8 border border-green-600 rounded-xl bg-[#1c1c1c]">
@@ -152,7 +152,19 @@ export default function Colonization() {
 
                 {isOpen && (
                   <div className="p-4 border-t border-[#2a2a2a]">
-                    <p className="text-sm text-green-400 font-bold">✅ Station construction completed!</p>
+                    <p className="text-sm text-green-400 font-bold mb-4">✅ Station construction completed!</p>
+
+                    <div className="text-sm text-[#ccc]">
+                      <strong className="text-green-400">Total commodities you delivered:</strong>
+                      <ul className="ml-4 list-disc mt-2">
+                        {[...new Set(entries.map(e => e.commodity))].map((commodity, idx) => {
+                          const totalQty = entries
+                            .filter(e => e.commodity === commodity)
+                            .reduce((sum, e) => sum + (e.quantity || 0), 0);
+                          return <li key={idx}>{commodity}: {totalQty}</li>;
+                        })}
+                      </ul>
+                    </div>
                   </div>
                 )}
               </div>
