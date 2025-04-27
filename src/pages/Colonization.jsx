@@ -53,6 +53,10 @@ export default function Colonization() {
           const displayStation = station.includes('ColonisationShip') ? 'System Colonisation Ship' : station;
           return (
             <div key={i} className="mb-8 border border-[#2a2a2a] rounded-xl bg-[#1c1c1c] p-4">
+              <pre className="text-xs text-green-400 bg-black p-2 rounded">
+  {JSON.stringify(entries[0], null, 2)}
+</pre>
+
               <h2 className="text-xl font-bold mb-2 text-[#ff8c00]">🪐 {system} — {displayStation}</h2>
               <table className="w-full text-sm text-left">
                 <thead>
