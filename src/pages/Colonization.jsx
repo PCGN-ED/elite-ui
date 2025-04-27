@@ -55,54 +55,36 @@ export default function Colonization() {
 
           return (
             <div key={i} className="mb-8 border border-[#2a2a2a] rounded-xl bg-[#1c1c1c] p-4">
-              <h2 className="text-xl font-bold mb-2 text-[#ff8c00]">🪐 {system} — {displayStation}</h2>
+              <h2 className="text-xl font-bold mb-4 text-[#ff8c00]">🪐 {system} — {displayStation}</h2>
 
-              <table className="w-full text-sm text-left">
-                <thead>
-                  <tr className="text-[#ffcc00] border-b border-[#333]">
-                    <th className="py-2">Commodity</th>
-                    <th className="py-2">Quantity</th>
-                    <th className="py-2">Timestamp</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {entries.map((entry, index) => (
-                    <tr key={index} className="border-b border-[#2a2a2a] hover:bg-[#262626]">
-                      <td className="py-1">{entry.commodity || '-'}</td>
-                      <td className="py-1">{entry.quantity || 0}</td>
-                      <td className="py-1 text-xs text-[#999]">{new Date(entry.timestamp).toLocaleString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <div className="mt-2 text-sm text-[#ccc]">
+              <div className="text-sm text-[#ccc] mb-4">
                 <strong className="text-[#ffa500]">Total per commodity:</strong>
-                <ul className="ml-4 list-disc">
+                <ul className="ml-4 list-disc mt-2">
                   {[...new Set(entries.map(e => e.commodity))].map((commodity, idx) => {
-                    const totalQty = entries.filter(e => e.commodity === commodity).reduce((sum, e) => sum + (e.quantity || 0), 0);
+                    const totalQty = entries
+                      .filter(e => e.commodity === commodity)
+                      .reduce((sum, e) => sum + (e.quantity || 0), 0);
                     return <li key={idx}>{commodity}: {totalQty}</li>;
                   })}
                 </ul>
               </div>
 
-              <div className="mt-2">
-  <div className="text-sm text-[#ffa500] font-bold mb-1">
-    🚧 Construction Progress: {Math.round(progressValue * 100)}%
-  </div>
-  <div className="w-full bg-[#333] h-2 rounded-full overflow-hidden">
-    <div
-      className="h-full bg-[#ffa500]"
-      style={{ width: `${Math.min(Math.round(progressValue * 100), 100)}%` }}
-    ></div>
-  </div>
-</div>
-
+              <div className="mt-2 mb-4">
+                <div className="text-sm text-[#ffa500] font-bold mb-1">
+                  🚧 Construction Progress: {Math.round(progressValue * 100)}%
+                </div>
+                <div className="w-full bg-[#333] h-2 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[#ffa500]"
+                    style={{ width: `${Math.min(Math.round(progressValue * 100), 100)}%` }}
+                  ></div>
+                </div>
+              </div>
 
               {groupedRequirements[marketId] && (
                 <div className="mt-4 text-sm text-[#ccc]">
                   <strong className="text-[#ffa500]">Still Required:</strong>
-                  <ul className="ml-4 list-disc">
+                  <ul className="ml-4 list-disc mt-2">
                     {groupedRequirements[marketId].map((req, idx) => (
                       <li key={idx}>{req.commodity}: {req.required - req.provided}</li>
                     ))}
