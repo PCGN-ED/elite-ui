@@ -82,12 +82,13 @@ export default function Colonization() {
                 </ul>
               </div>
               <div className="mt-2 text-sm text-[#ffa500] font-bold">
-                🚧 Construction Progress: {
-                  typeof entries[0]?.progress === 'number'
-                    ? `${Math.round(entries[0].progress * 100)}%`
-                    : 'Unknown'
-                }
+                 🚧 Construction Progress: {
+                 entries[0]?.progress !== undefined
+              ? `${Math.round(parseFloat(entries[0].progress) * 100)}%`
+               : 'Unknown'
+             }
               </div>
+
               {groupedRequirements[marketId] && (
                 <div className="mt-4 text-sm text-[#ccc]">
                   <strong className="text-[#ffa500]">Still Required:</strong>
