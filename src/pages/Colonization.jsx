@@ -34,7 +34,6 @@ export default function Colonization() {
     return acc;
   }, {});
 
-  // Include fully completed commodities in the progress bar by querying the full depot_commodities instead
   const fullProgress = requirements.reduce((acc, entry) => {
     if (!acc[entry.market_id]) acc[entry.market_id] = { provided: 0, required: 0 };
     acc[entry.market_id].provided += Number(entry.provided) || 0;
@@ -81,14 +80,14 @@ export default function Colonization() {
                     return <li key={idx}>{commodity}: {totalQty}</li>;
                   })}
                 </ul>
-                </div>
-                <div className="mt-2 text-sm text-[#ffa500] font-bold">
-                  🚧 Construction Progress: {
-                    fullProgress[marketId]
-                      ? `${fullProgress[marketId].provided.toLocaleString()} / ${fullProgress[marketId].required.toLocaleString()} (${Math.round((fullProgress[marketId].provided / fullProgress[marketId].required) * 100)}%)`
-                      : '0 / 0 (0%)'
-                  }
-                </div>
+              </div>
+              <div className="mt-2 text-sm text-[#ffa500] font-bold">
+                🚧 Construction Progress: {
+                  fullProgress[marketId]
+                    ? `${fullProgress[marketId].provided.toLocaleString()} / ${fullProgress[marketId].required.toLocaleString()}`
+                    : '0 / 0'
+                }
+              </div>
               {groupedRequirements[marketId] && (
                 <div className="mt-4 text-sm text-[#ccc]">
                   <strong className="text-[#ffa500]">Still Required:</strong>
